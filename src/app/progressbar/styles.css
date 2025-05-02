@@ -1,0 +1,17 @@
+.container{
+    width: 800px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.progressbar-container{
+    width: 500px;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+.progress{
+    text-align: center;
+}
