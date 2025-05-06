@@ -41,3 +41,14 @@ function _getRandomColor() {
     }
     return [...array]
   }
+
+
+  export const generateRandomOtp = (size=5)=>{
+    //simple way is to generate 5 random numbers and make a string thats it
+    let randomnumber = "";
+    for(let i=0;i<size;i++){
+        randomnumber += Math.floor(Math.random()*9)
+
+    }
+    return randomnumber;
+  }
