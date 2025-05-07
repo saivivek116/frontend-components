@@ -1,0 +1,16 @@
+.container{
+    font-size: 20px;
+}
+.folder-container{
+    padding-left: 20px;
+}
+
+.expand{
+    cursor: pointer;
+    margin-right: 5px;
+    /* padding: 5px; */
+}
+
+.item{
+    padding: 5px;
+}
