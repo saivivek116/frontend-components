@@ -1,0 +1,15 @@
+main {
+    padding: 10px;
+  }
+  
+  .list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .item {
+    padding: 5px;
+    border: 1px solid gray;
+    cursor: pointer;
+  }
