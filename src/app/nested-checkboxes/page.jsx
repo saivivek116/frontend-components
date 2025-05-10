@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
 import "./style.css";
 
 
@@ -34,15 +34,14 @@ const CheckboxesData = [
   ];
   
 
-  const Checkbox = ({props, handleChecked})=>{
-    const [checked, setChecked] = useState(props.checked);
+  const Checkbox = memo(({props, handleChecked})=>{
     return (
         <>
          <input className="checkbox" type="checkbox" checked={props.checked} onChange={()=>handleChecked(props.id)} />
          <label>{props.label}</label>
          </>
     )
-  }
+  })
 
   const Checkboxes = ({data, handleChecked}) => {
     return (
@@ -64,33 +63,38 @@ const CheckboxesData = [
 const NestedCheckbox = ()=>{
     const [checkboxesData, setCheckboxesData] = useState(CheckboxesData);
 
-    const updateChildren = (checboxes, state)=>{
-        return checboxes.map(c=>{
-            c.checked = state;
-            if(c.children){
-                c.children = updateChildren(c.children, state);
-            }
-            return c;
-        })
-    }
+    const updateChildren = useCallback((checboxes, state)=>{
+        return checboxes.map(c=>({
+            ...c,
+            checked: state,
+            children: c.children?updateChildren(c.children, state):undefined
+        }))
+    },[])
 
-    const updateCheckboxes = (data, id)=>{
+    const updateCheckboxes = useCallback((data, id)=>{
         return data.map(item=>{
-            
+
             if(item.id === id){
-                item.checked = !item.checked;
-                if(item.children){
-                    item.children = updateChildren(item.children, item.checked);
+                const checkedState = !item.checked
+                return {
+                    ...item,
+                    checked: checkedState,
+                    children: item.children?updateChildren(item.children, checkedState):undefined
                 }
-            }else{
-                if(item.children){
-                    item.children = updateCheckboxes(item.children, id)
-                    item.checked = item.children.every(item=>item.checked);
+            }
+
+            if(item.children){
+                const updatedChildren = updateCheckboxes(item.children, id)
+                const allChildrenChecked = updatedChildren.every(item=>item.checked);
+                return {
+                    ...item,
+                    children:updatedChildren,
+                    checked: allChildrenChecked
                 }
             }
             return item;
         });
-    }
+    },[]);
 
     const handleChecked = (id)=>{
         const new_data =  updateCheckboxes(checkboxesData, id);
