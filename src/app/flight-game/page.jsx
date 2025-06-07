@@ -155,16 +155,18 @@ const MazeGame = ()=>{
     const [disableBoard, setDisable] = useState();
     const boardref = useRef();
     const [timerKey, setTimerKey] = useState(0);
-    const [blocked, setBlocked] = useState(null); 
+    const [blocked, setBlocked] = useState(null);
+    const [started, setStarted] = useState(false);
+
     useEffect(() => {
-    const b = boardref.current;
-    function handleboardClick(e) {
-      if (disableBoard) {
-        e.stopPropagation();
-      }
-    }
-    b.addEventListener('click', handleboardClick, { capture: true });
-    return () => b.removeEventListener('click', handleboardClick, { capture: true })
+        const b = boardref.current;
+        function handleboardClick(e) {
+        if (disableBoard) {
+            e.stopPropagation();
+        }
+        }
+        b.addEventListener('click', handleboardClick, { capture: true });
+        return () => b.removeEventListener('click', handleboardClick, { capture: true })
   }, [disableBoard]);
 
   const handleTimeUp = ()=>{
@@ -172,13 +174,14 @@ const MazeGame = ()=>{
         setDisable(true);
     }
   
-    const handleReset = ()=>{
+    const handleStart = () => {
+        setStarted(true);
         setUserPoisition([0,0]);
         setTrack([]);
         setStatus("");
         setDisable(false);
-        setTimerKey(prev => prev + 1);
-    }
+        setTimerKey(prev => prev + 1); // reset timer
+    };
 
     useEffect(()=>{
         function handleKeyDown(e){
@@ -229,19 +232,20 @@ const MazeGame = ()=>{
         <div className="container">
             <div className="rules">
                     <p>Move one step at a time either horizontally or vertically and reach the flight within time </p>
-                </div>
-            <Timer
+                {!started?<button onClick={handleStart}>Start</button>:<Timer
                 key={timerKey}
                 minutes={1}
                 onTimeUp={handleTimeUp}
                 running={status === ""}
-            />
+            />}
+            </div>
+            
             <div className="board-container" ref={boardref}>
                 
             <Maze board={grid} handleClick={handleClick} position={userPosition} userTrack={track} blocked={blocked} />
             </div>
-            {status=="win" && <button onClick={handleReset}>Reset</button>}
-            {status=="loose" && <button onClick={handleReset}>Try Again</button>}
+            {status=="win" && <button onClick={handleStart}>Reset</button>}
+            {status=="loose" && <button onClick={handleStart}>Try Again</button>}
         </div>
     )
 }
