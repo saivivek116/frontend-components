@@ -4,16 +4,18 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 0;
   margin: 0;
+  position: relative;
+  overflow-x: hidden;
 }
 
 /* Hero Section */
 .hero {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.15);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding: 4rem 2rem;
   text-align: center;
   color: white;
+  position: relative;
 }
 
 .heroContent {
@@ -89,43 +91,35 @@
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
+  isolation: isolate;
+}
+
+@supports (display: grid) {
+  .grid {
+    contain: layout style;
+  }
 }
 
 /* Card Styling */
 .card {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.98);
   border-radius: 16px;
   padding: 2rem;
   text-decoration: none;
   color: #333;
   position: relative;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px) translateZ(0);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
   background: rgba(255, 255, 255, 1);
-}
-
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.card:hover::before {
-  opacity: 1;
 }
 
 .cardIcon {
@@ -175,6 +169,30 @@
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
+}
+
+/* Performance optimizations to prevent scroll artifacts */
+.card, .cardIcon {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+}
+
+/* Prevent repaints during scroll */
+.section {
+  contain: layout;
+}
+
+/* Optimize animations */
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+  
+  .heroIcon {
+    animation: none;
+  }
 }
 
 /* Responsive Design */
