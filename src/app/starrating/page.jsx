@@ -22,7 +22,8 @@ const StarRating = ()=>{
             {
             new Array(5).fill(0).map((i,idx)=>{
                 return (
-                    <i key={idx+1} className={`fa ${hover>=idx || selected>=idx?"fa-star":"fa-star-o"}`}
+                    <i key={idx+1}
+                     className={`fa ${hover>=idx || selected>=idx?"fa-star":"fa-star-o"}`}
                      onClick={()=>handleClick(idx)}
                     onMouseEnter={()=>handleMouseEnter(idx)}
                     onMouseLeave={()=>handleMouseLeave(idx)}></i>
