@@ -18,10 +18,19 @@ import {
   FaBook,
   FaPlane,
   FaCode,
-  FaRocket
+  FaRocket,
+  FaLock
 } from "react-icons/fa";
 
 const components = [
+  { 
+    name: "passwordstrengthchecker", 
+    url: "/passwordstrengthchecker", 
+    title: "Password Strength Checker",
+    description: "A component to check and visualize the strength of a password in real-time.",
+    icon: FaLock,
+    category: "forms"
+  },
   { 
     name: "autocomplete", 
     url: "/autocomplete", 
@@ -101,7 +110,8 @@ const components = [
     description: "Countdown and stopwatch functionality with controls",
     icon: FaClock,
     category: "utility"
-  }
+  },
+
 ];
 
 const games = [

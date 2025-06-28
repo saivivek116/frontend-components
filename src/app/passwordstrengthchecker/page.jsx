@@ -1,6 +1,6 @@
-"use client"
+"use client";
 import { useState } from "react";
-import "./style.css";
+import styles from "./style.module.css";
 
 //requirements
 
@@ -22,10 +22,9 @@ progressbar div 100%
 */
 
 const ProgressBar = ({ strength }) => {
-  console.log(strength);
   return (
     <div>
-      <div className="progress-bar">
+      <div className={styles.progressBar}>
         <div className="fill"></div>
       </div>
       <p>Strength: {strength}</p>
@@ -37,14 +36,12 @@ export default function PasswordStrengthChecker() {
   const [password, setPassword] = useState("");
   const [strength, setStrength] = useState(0);
   const [score, setScore] = useState({
-      uc: 0,
-      lc: 0,
-      num: 0,
-      sc: 0,
-      sz: 0,
-    });
-    
-
+    uc: 0,
+    lc: 0,
+    num: 0,
+    sc: 0,
+    sz: 0,
+  });
 
   const onChangePassword = (e) => {
     const typecountmap = {
@@ -59,7 +56,7 @@ export default function PasswordStrengthChecker() {
     const new_password = e.target.value;
     if (new_password.length < 3) {
       setPassword(e.target.value);
-      setStrength(0)
+      setStrength(0);
       return;
     }
     //65 - 65+26-1
@@ -93,33 +90,40 @@ export default function PasswordStrengthChecker() {
   };
 
   return (
-    <div className="container">
-        <div>
-    <label htmlFor="password">Password</label>
-      <input type="password" id="password" value={password} onChange={onChangePassword} placeholder="Enter your password" />
-        </div>
-        <div>
-            <h2 className="instructions">Instructions</h2>
+    <div className={styles.container}>
+      <div>
+        <label htmlFor="password" className={styles.label}>
+          Password
+        </label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={onChangePassword}
+          placeholder="Enter your password"
+          className={styles.input}
+        />
+      </div>
+      <div>
+        <h2 className={styles.instructions}>Instructions</h2>
         <ol>
-            <li className={`${score["lc"]>=2?"satisfied":""}`}>
-                Atleast 2 lower case letters
-            </li>
-            <li className={`${score["uc"]>=2?"satisfied":""}`}>
-                Atleast 2 Upper case letters
-            </li>
-            <li className={`${score["num"]>=2?"satisfied":""}`}>
-                Atleast 2 numbers
-            </li>
-
-            <li className={`${score["sc"]>=2?"satisfied":""}`}>
-                Atleast 2 special characters
-            </li>
-            <li className={`${score["sz"]>=2?"satisfied":""}`}>
-                Atleast length of 6
-            </li>
+          <li className={score["lc"] >= 2 ? styles.satisfied : ""}>
+            At least 2 lower case letters
+          </li>
+          <li className={score["uc"] >= 2 ? styles.satisfied : ""}>
+            At least 2 upper case letters
+          </li>
+          <li className={score["num"] >= 2 ? styles.satisfied : ""}>
+            At least 2 numbers
+          </li>
+          <li className={score["sc"] >= 2 ? styles.satisfied : ""}>
+            At least 2 special characters
+          </li>
+          <li className={score["sz"] >= 2 ? styles.satisfied : ""}>
+            At least length of 6
+          </li>
         </ol>
-        </div>
-        
+      </div>
       <ProgressBar strength={strength} />
     </div>
   );
