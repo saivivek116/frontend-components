@@ -33,9 +33,19 @@ const ProgressBar = ({ strength }) => {
   );
 };
 
-export default function App() {
+export default function PasswordStrengthChecker() {
   const [password, setPassword] = useState("");
   const [strength, setStrength] = useState(0);
+  const [score, setScore] = useState({
+      uc: 0,
+      lc: 0,
+      num: 0,
+      sc: 0,
+      sz: 0,
+    });
+    
+
+
   const onChangePassword = (e) => {
     const typecountmap = {
       uc: 0,
@@ -44,12 +54,12 @@ export default function App() {
       sc: 0,
       sz: 0,
     };
-    console.log(typecountmap["lc"]);
+    // console.log(typecountmap["lc"]);
     const specialCharsRegex = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     const new_password = e.target.value;
     if (new_password.length < 3) {
       setPassword(e.target.value);
-      setStrength(0);
+      setStrength(0)
       return;
     }
     //65 - 65+26-1
@@ -75,8 +85,9 @@ export default function App() {
       }
     }
     typecountmap["sz"] = new_password.length >= 6 ? 2 : 0;
+    // console.log(typecountmap)
+    setScore(typecountmap);
     setPassword(new_password);
-    // for(let m in Object.values(typecountmap))
     let st = Object.values(typecountmap).reduce((acc, curr) => acc + curr, 0);
     setStrength(st);
   };
@@ -86,6 +97,27 @@ export default function App() {
         <div>
     <label htmlFor="password">Password</label>
       <input type="password" id="password" value={password} onChange={onChangePassword} placeholder="Enter your password" />
+        </div>
+        <div>
+            <h2 className="instructions">Instructions</h2>
+        <ol>
+            <li className={`${score["lc"]>=2?"satisfied":""}`}>
+                Atleast 2 lower case letters
+            </li>
+            <li className={`${score["uc"]>=2?"satisfied":""}`}>
+                Atleast 2 Upper case letters
+            </li>
+            <li className={`${score["num"]>=2?"satisfied":""}`}>
+                Atleast 2 numbers
+            </li>
+
+            <li className={`${score["sc"]>=2?"satisfied":""}`}>
+                Atleast 2 special characters
+            </li>
+            <li className={`${score["sz"]>=2?"satisfied":""}`}>
+                Atleast length of 6
+            </li>
+        </ol>
         </div>
         
       <ProgressBar strength={strength} />
